@@ -98,7 +98,30 @@ public class AppointmentManagerTest {
         assertEquals("john@example.com", testPatient.getEmail());
     }
 
+  @Test
+    public void testAppointmentState() {
+        Appointment appointment = new Appointment(testAppointmentId, testPatientId, testDate, "Routine Checkup");
+        appointment.setState(new ScheduledState());
+        appointment.applyState();
+        assertEquals(ScheduledState.class, appointment.state.getClass());
+    }
 
+    @Test
+    public void testAppointmentStateChange() {
+        Appointment appointment = new Appointment(testAppointmentId, testPatientId, testDate, "Routine Checkup");
+        appointment.setState(new CancelledState());
+        appointment.applyState();
+        assertEquals(CancelledState.class, appointment.state.getClass());
+    }
+
+    @Test
+    public void testMultiplePatients() {
+        Patient patient1 = new Patient("2", "Jane Smith", "jane@example.com");
+        manager.registerPatient(patient1);
+        Patient patient2 = new Patient("3", "Mike Brown", "mike@example.com");
+        manager.registerPatient(patient2);
+        assertNotSame(patient1.getId(), patient2.getId());
+    }
 }
 
    
